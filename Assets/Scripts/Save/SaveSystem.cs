@@ -14,27 +14,29 @@ public class SaveSystem : MonoBehaviour
     private void Awake()
     {
         instance = this;
-        data = new SaveData();
         filePath = Application.persistentDataPath + "/game.save";
-    }
-
-    private void Start()
-    {
         LoadFile();
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyUp(KeyCode.S))
-        {
-            Save();
-        }
     }
 
     public void Save()
     {
         data.playerInfo.x = PlayerMovements.instance.transform.position.x;
         data.playerInfo.y = PlayerMovements.instance.transform.position.y;
+
+        data.playerInfo.score = PlayerMovements.instance.score;
+
+        data.levelInfo.CoinsInfos.Clear();
+
+        foreach (GameObject coin in LevelLoader.mInstance.mCoins)
+        {
+            ActorInfo actorInfo = new()
+            {
+                x = coin.transform.position.x,
+                y = coin.transform.position.y
+            };
+
+            data.levelInfo.CoinsInfos.Add(actorInfo);
+        }
 
         string json = JsonUtility.ToJson(data);
         Debug.Log(json);
@@ -58,5 +60,10 @@ public class SaveSystem : MonoBehaviour
             string json = File.ReadAllText(filePath);
             data = JsonUtility.FromJson<SaveData>(json);
         }
+    }
+
+    public void ResetFile()
+    {
+        File.Delete(filePath);
     }
 }

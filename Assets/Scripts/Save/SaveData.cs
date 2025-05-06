@@ -7,9 +7,11 @@ using UnityEngine;
 public class SaveData
 {
     public PlayerInfo playerInfo;
+    public LevelInfo levelInfo;
 
     public SaveData() 
     {
         playerInfo = new PlayerInfo();
+        levelInfo = new LevelInfo();
     }
 }
