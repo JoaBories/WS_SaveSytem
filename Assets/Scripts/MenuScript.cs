@@ -7,6 +7,7 @@ public class MenuScript : MonoBehaviour
 {
 
     [SerializeField] GameObject continueButton;
+    [SerializeField] GameObject areYouSurePanel;
 
     private void Start()
     {
@@ -14,12 +15,32 @@ public class MenuScript : MonoBehaviour
         {
             continueButton.SetActive(false);
         }
+
+        areYouSurePanel.SetActive(false);
+    }
+
+    public void Yes()
+    {
+        SaveSystem.instance.ResetFile();
+        SceneManager.LoadScene(1);
+    }
+
+    public void No()
+    {
+        areYouSurePanel.SetActive(false);
     }
 
     public void NewGame()
     {
-        SaveSystem.instance.ResetFile();
-        SceneManager.LoadScene(1);
+        if (SaveSystem.instance.HasASave())
+        {
+            areYouSurePanel.SetActive(true);
+        }
+        else
+        {
+            SaveSystem.instance.ResetFile();
+            SceneManager.LoadScene(1);
+        }
     }
 
     public void Continue()
