@@ -45,7 +45,7 @@ public class PlayerMovements : MonoBehaviour
     private void Start()
     {
         saveSystem = SaveSystem.instance;
-        if (SaveSystem.instance.HasASave())
+        if (SaveSystem.instance.HasASave(PlayerPrefs.GetInt("SaveIndex")))
         {
             transform.position = new Vector3(saveSystem.data.playerInfo.x, saveSystem.data.playerInfo.y, 0);
             score = saveSystem.data.playerInfo.score;

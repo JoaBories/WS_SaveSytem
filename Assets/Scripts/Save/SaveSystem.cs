@@ -14,8 +14,15 @@ public class SaveSystem : MonoBehaviour
     private void Awake()
     {
         instance = this;
-        filePath = Application.persistentDataPath + "/game.save";
-        LoadFile();
+        filePath = Application.persistentDataPath;
+        if (PlayerPrefs.HasKey("SaveIndex"))
+        {
+            LoadFile(PlayerPrefs.GetInt("SaveIndex"));
+        }
+        else
+        {
+            LoadFile(1);
+        }
     }
 
     public void Save()
@@ -41,29 +48,29 @@ public class SaveSystem : MonoBehaviour
         string json = JsonUtility.ToJson(data);
         Debug.Log(json);
 
-        if (!HasASave())
+        if (!HasASave(PlayerPrefs.GetInt("SaveIndex")))
         {
-            File.Create(filePath).Dispose();
+            File.Create(filePath + "/game" + PlayerPrefs.GetInt("SaveIndex") + ".save").Dispose();
         }
-        File.WriteAllText(filePath, json);
+        File.WriteAllText(filePath + "/game" + PlayerPrefs.GetInt("SaveIndex") + ".save", json);
     }
 
-    public bool HasASave()
+    public bool HasASave(int saveNumber)
     {
-        return File.Exists(filePath);
+        return File.Exists(filePath + "/game" + saveNumber + ".save");
     }
 
-    public void LoadFile()
+    public void LoadFile(int saveNumber)
     {
-        if (HasASave())
+        if (HasASave(saveNumber))
         {
-            string json = File.ReadAllText(filePath);
+            string json = File.ReadAllText(filePath + "/game" + saveNumber + ".save");
             data = JsonUtility.FromJson<SaveData>(json);
         }
     }
 
     public void ResetFile()
     {
-        File.Delete(filePath);
+        File.Delete(filePath + "/game" + PlayerPrefs.GetInt("SaveIndex") + ".save");
     }
 }

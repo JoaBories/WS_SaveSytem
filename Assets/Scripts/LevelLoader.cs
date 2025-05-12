@@ -23,7 +23,7 @@ public class LevelLoader : MonoBehaviour
 
     private void LoadLevel()
     {
-        if (mSaveSystem.HasASave())
+        if (mSaveSystem.HasASave(PlayerPrefs.GetInt("SaveIndex")))
         {
             foreach (GameObject coin in mCoins)
             {
